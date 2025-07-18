@@ -1,0 +1,9 @@
+[project]
+name = "Manim-Animations"
+version = "0.1.0"
+description = "A collection of animations for Minecraft Transit Railway tutorial videos."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "manim>=0.19.0",
+]
