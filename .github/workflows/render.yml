@@ -1,0 +1,36 @@
+name: Render
+on: [ pull_request, push, workflow_dispatch ]
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - folder: tutorial/episode_1
+            name: rail_layout_1
+          - folder: tutorial/episode_1
+            name: rail_layout_2
+          - folder: tutorial/episode_1
+            name: rail_types
+          - folder: tutorial/episode_1
+            name: rails_stations_routes_depots
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+      - name: Render in Manim Docker
+        run: |
+          docker pull manimcommunity/manim:stable
+          docker run --rm \
+            -v "$PWD/src:/manim/src" \
+            -v "$PWD/media:/manim/media" \
+            -e PYTHONPATH=/manim/src \
+            --user root \
+            manimcommunity/manim:stable \
+            manim -qk /manim/src/manim_animations/${{ matrix.folder }}/${{ matrix.name }}.py -a
+      - name: Upload rendered videos
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.name }}
+          path: media/videos/${{ matrix.name }}/2160p60/*.mp4

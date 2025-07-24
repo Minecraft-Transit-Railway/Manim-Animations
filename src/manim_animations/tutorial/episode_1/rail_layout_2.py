@@ -1,7 +1,7 @@
 from manim_animations.common import *
 
 TEXT_1 = ["Siding", "Platform 1", "Platform 2"]
-TEXT_2 = ["South Sand Bay", "Desert Plains"]
+TEXT_2 = ["Desert Plains", "South Sand Bay"]
 
 POINT_3 = (-TRAIN_LENGTH / 2, 0, 0)
 POINT_4 = (TRAIN_LENGTH / 2, 0, 0)
