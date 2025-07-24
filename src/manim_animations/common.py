@@ -31,6 +31,13 @@ def create_text_object(text: list[str], index: int):
     return text_object[1], text_object[1].width, text_object.height
 
 
+def combine_paths(*objects: VMobject):
+    new_object = VMobject()
+    for path_object in objects:
+        new_object.append_points(path_object.get_points())
+    return new_object
+
+
 def animate_train(path: VMobject, reverse: bool, start_from_point: bool, end_at_point: bool):
     car_length = TRAIN_LENGTH / TRAIN_CAR_COUNT
     car_gap = 0.04
@@ -56,7 +63,7 @@ def animate_train(path: VMobject, reverse: bool, start_from_point: bool, end_at_
         cars.append(car)
 
     reset_animation = InstantAnimation(lambda: tracker.set_value(end_point if reverse else start_point))
-    return Succession(
+    return cars, Succession(
         Add(*cars),
         reset_animation,
         tracker.animate.set_value(start_point if reverse else end_point)

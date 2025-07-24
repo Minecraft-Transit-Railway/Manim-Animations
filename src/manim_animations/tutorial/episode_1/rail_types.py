@@ -18,47 +18,47 @@ class RailTypes(Scene):
         rail_1 = self.create_rail(GRAY, 3, False)
         self.play(self.create_text(0, 3), Create(rail_1))
 
-        animate_cars_1_1, _ = animate_train(rail_1, False, True, True)
-        animate_cars_1_2, _ = animate_train(rail_1, True, True, True)
-        self.play(Succession(animate_cars_1_1, animate_cars_1_2, run_time=5, rate_func=linear))
+        _, animate_trains_1_1, _ = animate_train(rail_1, False, True, True)
+        _, animate_trains_1_2, _ = animate_train(rail_1, True, True, True)
+        self.play(Succession(animate_trains_1_1, animate_trains_1_2, run_time=5, rate_func=linear))
 
         rail_2 = self.create_rail(GRAY, 1.5, False)
         self.play(self.create_text(1, 1.5), Create(rail_2), create_one_way_arrows(rail_2))
 
-        animate_cars_2_1, _ = animate_train(rail_2, False, True, True)
-        animate_cars_2_2, _ = animate_train(rail_2, False, True, True)
-        self.play(Succession(animate_cars_2_1, animate_cars_2_2, run_time=5, rate_func=linear))
+        _, animate_trains_2_1, _ = animate_train(rail_2, False, True, True)
+        _, animate_trains_2_2, _ = animate_train(rail_2, False, True, True)
+        self.play(Succession(animate_trains_2_1, animate_trains_2_2, run_time=5, rate_func=linear))
 
         passenger_dots, add_passengers, animate_passengers = self.create_passengers()
         rail_3 = self.create_rail(PLATFORM_COLOR, 0, False)
         self.play(self.create_text(2, 0), Create(rail_3), add_passengers)
 
-        animate_cars_3_1, reset_cars_3_1 = animate_train(Line((RAIL_LEFT, 0, 0), (RAIL_RIGHT - RAIL_PADDING, 0, 0)), False, True, False)
-        animate_cars_3_2, _ = animate_train(Line((RAIL_LEFT + RAIL_PADDING, 0, 0), (RAIL_RIGHT, 0, 0)), False, False, True)
-        self.play(animate_cars_3_1.set_rate_func(rush_from).set_run_time(2))
+        _, animate_trains_3_1, reset_trains_3_1 = animate_train(Line((RAIL_LEFT, 0, 0), (RAIL_RIGHT - RAIL_PADDING, 0, 0)), False, True, False)
+        _, animate_trains_3_2, _ = animate_train(Line((RAIL_LEFT + RAIL_PADDING, 0, 0), (RAIL_RIGHT, 0, 0)), False, False, True)
+        self.play(animate_trains_3_1.set_rate_func(rush_from).set_run_time(2))
         self.play(animate_passengers)
         self.remove(*passenger_dots)
-        reset_cars_3_1.begin()
-        self.play(animate_cars_3_2.set_rate_func(rush_into).set_run_time(2))
+        reset_trains_3_1.begin()
+        self.play(animate_trains_3_2.set_rate_func(rush_into).set_run_time(2))
 
         rail_4 = self.create_rail(SIDING_COLOR, -1.5, True)
         self.play(self.create_text(3, -1.5), Create(rail_4))
 
-        animate_cars_4_1, reset_cars_4_1 = animate_train(Line((RAIL_LEFT + RAIL_PADDING, -1.5, 0), (RAIL_RIGHT, -1.5, 0)), False, False, True)
-        self.play(animate_cars_4_1.set_rate_func(rush_into).set_run_time(2))
-        reset_cars_4_1.begin()
+        _, animate_trains_4_1, reset_trains_4_1 = animate_train(Line((RAIL_LEFT + RAIL_PADDING, -1.5, 0), (RAIL_RIGHT, -1.5, 0)), False, False, True)
+        self.play(animate_trains_4_1.set_rate_func(rush_into).set_run_time(2))
+        reset_trains_4_1.begin()
         self.update_mobjects(0)
         self.wait()
-        self.play(animate_cars_4_1.set_rate_func(rush_into).set_run_time(2))
+        self.play(animate_trains_4_1.set_rate_func(rush_into).set_run_time(2))
 
         rail_5 = self.create_rail(TURN_BACK_COLOR, -3, True)
         self.play(self.create_text(4, -3), Create(rail_5))
 
-        animate_cars_5_1, reset_cars_5_1 = animate_train(Line((RAIL_RIGHT, -3, 0), (RAIL_LEFT + RAIL_PADDING, -3, 0)), False, True, False)
-        animate_cars_5_2, _ = animate_train(Line((RAIL_LEFT + RAIL_PADDING, -3, 0), (RAIL_RIGHT, -3, 0)), False, False, True)
-        self.play(animate_cars_5_1.set_rate_func(rush_from).set_run_time(2))
-        reset_cars_5_1.begin()
-        self.play(animate_cars_5_2.set_rate_func(rush_into).set_run_time(2))
+        _, animate_trains_5_1, reset_trains_5_1 = animate_train(Line((RAIL_RIGHT, -3, 0), (RAIL_LEFT + RAIL_PADDING, -3, 0)), False, True, False)
+        _, animate_trains_5_2, _ = animate_train(Line((RAIL_LEFT + RAIL_PADDING, -3, 0), (RAIL_RIGHT, -3, 0)), False, False, True)
+        self.play(animate_trains_5_1.set_rate_func(rush_from).set_run_time(2))
+        reset_trains_5_1.begin()
+        self.play(animate_trains_5_2.set_rate_func(rush_into).set_run_time(2))
 
         self.wait()
 
@@ -79,7 +79,7 @@ class RailTypes(Scene):
 
     @staticmethod
     def create_gradient_rectangle(width, height, flipped):
-        new_width = 16 if config.quality == "low_quality" else 4096
+        new_width = 16 if config.quality == "low_quality" else 256
         new_height = round(height / width * new_width)
         rgba = np.zeros((new_height, new_width, 4), dtype=np.uint8)
         rgba[..., 3] = np.tile(np.linspace(0 if flipped else 255, 255 if flipped else 0, new_width, dtype=np.uint8), (new_height, 1))
