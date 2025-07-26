@@ -19,15 +19,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@main
+      - name: Build custom Manim Docker image
+        run: docker build -t custom-manim .
       - name: Render in Manim Docker
         run: |
-          docker pull manimcommunity/manim:stable
           docker run --rm \
             -v "$PWD/src:/manim/src" \
             -v "$PWD/media:/manim/media" \
             -e PYTHONPATH=/manim/src \
-            --user root \
-            manimcommunity/manim:stable \
+            custom-manim \
             manim -qk /manim/src/manim_animations/${{ matrix.folder }}/${{ matrix.name }}.py -a
       - name: Upload rendered videos
         uses: actions/upload-artifact@main

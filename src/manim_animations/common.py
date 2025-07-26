@@ -27,7 +27,13 @@ def create_text_object(text: list[str], index: int):
         for letter in text_part:
             if letter not in letters:
                 letters += letter
-    text_object = Tex(*[" " + text_part + " " for text_part in [letters, text[index], letters]])
+    template = TexTemplate()
+    template.add_to_preamble(r"""
+        \usepackage[T1]{fontenc}
+        \usepackage[sfdefault]{noto}
+        \renewcommand{\bfdefault}{sb}
+    """)
+    text_object = Tex(*[r" \notosans\bfseries " + text_part + " " for text_part in [letters, text[index], letters]], tex_template=template)
     return text_object[1], text_object[1].width, text_object.height
 
 
